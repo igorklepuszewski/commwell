@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from communication.models import Badge, Feedback, Kudos
+from communication.models import Badge, Feedback, Kudos, KudosCategory, FeedbackCategory
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
@@ -17,3 +17,14 @@ class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Badge
         fields = ["owners", "badge_name", "badge_picture", "required_kudos", "category"]
+
+
+class KudosCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KudosCategory
+        fields = ["name"]
+
+class FeedbackCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackCategory
+        fields = ["name"]        

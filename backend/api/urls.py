@@ -18,7 +18,7 @@ from django.urls import path
 from rest_framework import routers
 from django.urls import include, path
 
-from communication.views import BadgeViewSet, FeedbackViewSet, KudosViewSet
+from communication.views import BadgeViewSet, FeedbackViewSet, KudosViewSet, KudosCategoryViewSet, FeedbackCategoryViewSet
 from core.views import UserViewSet
 
 router = routers.DefaultRouter()
@@ -26,6 +26,8 @@ router.register(r"user", UserViewSet)
 router.register(r"kudos", KudosViewSet)
 router.register(r"feedback", FeedbackViewSet)
 router.register(r"badge", BadgeViewSet)
+router.register(r"KudosCategory", KudosCategoryViewSet)
+router.register(r"FeedbackCategory", FeedbackCategoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
