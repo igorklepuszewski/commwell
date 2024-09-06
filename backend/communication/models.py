@@ -1,7 +1,6 @@
 from django.db import models
 
 from core.models import User
-from django.db.models import Count
 
 # Create your models here.
 
@@ -51,11 +50,10 @@ class Kudos(Message):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        count_cat_kudoses = Kudos.objects.filter(category=self.category, receiver=self.receiver).aggregate(count=Count('id'))['count']
+        count_cat_kudoses = Kudos.objects.filter(category=self.category, receiver=self.receiver).count()
         eligible_badges = Badge.objects.filter(category=self.category, required_kudos__lte=count_cat_kudoses)
-        if eligible_badges.exists():
-            for badge in eligible_badges:
-                badge.owners.add(self.receiver)
+        for badge in eligible_badges:
+            badge.owners.add(self.receiver)
 
 class Feedback(Message):
     category = models.ForeignKey(FeedbackCategory, on_delete=models.SET_NULL, null=True, blank=True)
