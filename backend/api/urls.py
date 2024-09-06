@@ -18,7 +18,10 @@ from django.urls import path
 from rest_framework import routers
 from django.urls import include, path
 
+from core.views import UserViewSet
+
 router = routers.DefaultRouter()
+router.register(r"user", UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
