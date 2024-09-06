@@ -16,4 +16,4 @@ class KudosSerializer(serializers.ModelSerializer):
 class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Badge
-        fields = ["owners", "badge_name", "badge_picuture", "required_kudos", "category"]
+        fields = ["owners", "badge_name", "badge_picture", "required_kudos", "category"]

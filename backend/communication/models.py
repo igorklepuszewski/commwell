@@ -1,6 +1,7 @@
 from django.db import models
 
 from core.models import User
+from django.db.models import Count
 
 # Create your models here.
 
@@ -30,6 +31,16 @@ class Message(models.Model):
         abstract = True
 
 
+class Badge(models.Model):
+    owners = models.ManyToManyField(User, blank=True, related_name="badges_own")
+    badge_name = models.CharField(max_length=40)
+    badge_picture = models.ImageField(blank=True, null=True)
+    required_kudos = models.PositiveIntegerField(default=1)
+    category = models.ForeignKey(KudosCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.badge_name} - {self.category}"
+
 class Kudos(Message):
     category = models.ForeignKey(KudosCategory, on_delete=models.SET_NULL, null=True, blank=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="kudos_received")
@@ -37,6 +48,14 @@ class Kudos(Message):
 
     def __str__(self):
         return f"Kudos ID:{self.id} from {self.sender} to {self.receiver}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        count_cat_kudoses = Kudos.objects.filter(category=self.category, receiver=self.receiver).aggregate(count=Count('id'))['count']
+        eligible_badges = Badge.objects.filter(category=self.category, required_kudos__lte=count_cat_kudoses)
+        if eligible_badges.exists():
+            for badge in eligible_badges:
+                badge.owners.add(self.receiver)
 
 class Feedback(Message):
     category = models.ForeignKey(FeedbackCategory, on_delete=models.SET_NULL, null=True, blank=True)
@@ -48,13 +67,4 @@ class Feedback(Message):
         return f"Feedback {self.id} from {self.sender} to {self.receiver}"
 
 
-class Badge(models.Model):
-    owners = models.ManyToManyField(User, blank=True)
-    badge_name = models.CharField(max_length=40)
-    badge_picture = models.ImageField(blank=True, null=True)
-    required_kudos = models.PositiveIntegerField(default=1)
-    category = models.ForeignKey(KudosCategory, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.badge_name} - {self.category}"
 
