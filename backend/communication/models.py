@@ -51,7 +51,7 @@ class Feedback(Message):
 class Badge(models.Model):
     owners = models.ManyToManyField(User, blank=True)
     badge_name = models.CharField(max_length=40)
-    badget_picture = models.ImageField(blank=True, null=True)
+    badge_picture = models.ImageField(blank=True, null=True)
     required_kudos = models.PositiveIntegerField(default=1)
     category = models.ForeignKey(KudosCategory, on_delete=models.CASCADE)
 
