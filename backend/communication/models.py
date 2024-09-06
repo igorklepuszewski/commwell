@@ -10,6 +10,9 @@ class Category(models.Model):
     class Meta:
         abstract=True
 
+    def __str__(self):
+        return self.name
+
 class KudosCategory(Category):
     pass
 
@@ -43,3 +46,15 @@ class Feedback(Message):
 
     def __str__(self):
         return f"Feedback {self.id} from {self.sender} to {self.receiver}"
+
+
+class Badge(models.Model):
+    owners = models.ManyToManyField(User, blank=True)
+    badge_name = models.CharField(max_length=40)
+    badget_picture = models.ImageField(blank=True, null=True)
+    required_kudos = models.PositiveIntegerField(default=1)
+    category = models.ForeignKey(KudosCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.badge_name} - {self.category}"
+
