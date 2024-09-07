@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from django.urls import include, path
 
 from communication.views import BadgeViewSet, FeedbackViewSet, KudosViewSet, KudosCategoryViewSet, FeedbackCategoryViewSet
@@ -26,11 +30,13 @@ router.register(r"user", UserViewSet)
 router.register(r"kudos", KudosViewSet)
 router.register(r"feedback", FeedbackViewSet)
 router.register(r"badge", BadgeViewSet)
-router.register(r"KudosCategory", KudosCategoryViewSet)
-router.register(r"FeedbackCategory", FeedbackCategoryViewSet)
+router.register(r"kudoscategory", KudosCategoryViewSet)
+router.register(r"feedbackcategory", FeedbackCategoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
