@@ -15,11 +15,15 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class UserDetailSerializer(UserSerializer):
-    in_messages_count = serializers.IntegerField(read_only=True)
-    out_messages_count = serializers.IntegerField(read_only=True)
     badges_own = BadgeSerializer(many=True)
 
+class UserMessageStatsSerializer(UserSerializer):
+    in_messages_count = serializers.IntegerField(read_only=True)
+    out_messages_count = serializers.IntegerField(read_only=True)
+
     class Meta(UserSerializer.Meta):
-        model = UserSerializer.Meta.model
-        fields = UserSerializer.Meta.fields + ['in_messages_count', 'out_messages_count']
+        model = User
+        fields = ["id", "in_messages_count", "out_messages_count"]
+
+    
 

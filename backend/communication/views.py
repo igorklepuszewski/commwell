@@ -45,4 +45,4 @@ class FeedbackCategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = FeedbackCategory.objects.all()
     serializer_class = FeedbackCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]    
+    permission_classes = [permissions.IsAuthenticated] 
