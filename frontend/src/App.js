@@ -1,11 +1,10 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './LoginPage.js';
 import HomePage from './HomePage.js';
-import FeedbackPage from './FeedbackPage';
-import KudosPage from './KudosPage';
-import ProfilePage from './ProfilePage';
+import FeedbackPage from './FeedbackPage.js';
+import KudosPage from './KudosPage.js';
+import ProfilePage from './ProfilePage.js';  // Import the ProfilePage component
 
 function App() {
   return (

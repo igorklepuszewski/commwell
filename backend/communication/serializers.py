@@ -9,9 +9,13 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = ["category", "receiver", "sender"]
 
 class KudosSerializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Kudos
         fields = ["category", "receiver", "sender"]
+
+    def get_category_name(self):
+        return self.category.name
 
 class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,9 +26,9 @@ class BadgeSerializer(serializers.ModelSerializer):
 class KudosCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = KudosCategory
-        fields = ["name"]
+        fields = ["id", "name"]
 
 class FeedbackCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FeedbackCategory
-        fields = ["name"]        
+        fields = ["id", "name"]        
