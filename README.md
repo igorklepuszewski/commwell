@@ -34,8 +34,3 @@ Once you done with setup, good to go with base url: `http://127.0.0.1:8001/api`
 * /feedbackcategory
     * GET : list feedback category.
     * POST: create feedback kudos category.
-
-
-## Limitations:
-* Right now we can send or received kudos or feedback within the platform privately.
-* We don't have feature, what will do with the kudos points.
