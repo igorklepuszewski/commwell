@@ -26,6 +26,8 @@ class UserViewSet(viewsets.ModelViewSet):
             return self.serializer_class
 
     def get_queryset(self):
+        if self.action == "list":
+            return super().get_queryset().exclude(id=self.request.user.id)
         return super().get_queryset()
 
     @action(detail=True, methods=['get'], url_path='message-stats', url_name='message_stats')

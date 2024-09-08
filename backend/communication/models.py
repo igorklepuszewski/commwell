@@ -32,13 +32,13 @@ class Message(models.Model):
 
 class Badge(models.Model):
     owners = models.ManyToManyField(User, blank=True, related_name="badges_own")
-    badge_name = models.CharField(max_length=40)
-    badge_picture = models.ImageField(blank=True, null=True)
+    name = models.CharField(max_length=40)
+    picture = models.ImageField(blank=True, null=True)
     required_kudos = models.PositiveIntegerField(default=1)
     category = models.ForeignKey(KudosCategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.badge_name} - {self.category}"
+        return f"{self.name} - {self.category}"
 
 class Kudos(Message):
     category = models.ForeignKey(KudosCategory, on_delete=models.SET_NULL, null=True, blank=True)

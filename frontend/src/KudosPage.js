@@ -56,7 +56,6 @@ const KudosPage = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
           setCategories(data);
         } else {
           setError('Failed to fetch categories');

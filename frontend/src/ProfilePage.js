@@ -95,7 +95,7 @@ function ProfilePage() {
               badges.map((badge) => (
                 <ListItem key={badge.id}>
                   <ListItemText
-                    primary={badge.badge_name}
+                    primary={badge.name}
                   />
                 </ListItem>
               ))
@@ -115,7 +115,7 @@ function ProfilePage() {
               kudoses.map((kudos) => (
                 <ListItem key={kudos.id}>
                   <ListItemText
-                    primary={kudos.category}
+                    primary={kudos.message.trim() === "" ? "Empty Kudos" : kudos.message}
                   />
                 </ListItem>
               ))

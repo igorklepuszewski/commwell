@@ -31,7 +31,6 @@ function FeedbackPage() {
       // Clear form fields
       setName('');
       setComments('');
-      alert('Feedback submitted successfully!');
     } catch (err) {
       setError('Failed to submit feedback. Please try again.');
     }

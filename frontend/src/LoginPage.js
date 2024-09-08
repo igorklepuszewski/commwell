@@ -2,27 +2,26 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { TextField, Button, Divider, Container, Box, Typography } from "@mui/material";
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
 
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();  // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(username)
-      console.log(password)
       const response = await axios.post("http://localhost:8001/api/token/", {
         username,
         password,
       });
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
-      alert("Login successful");
+      navigate("/profile");  // Redirect to homepage after login
     } catch (error) {
-      console.error("Login failed:", error.response.data);  // Log the error details
-      alert("Login failed");
+      console.error("Login failed:", error.response.data);
     }
   };
 

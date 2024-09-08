@@ -33,13 +33,13 @@ class KudosViewSet(viewsets.ModelViewSet):
 
         # Add sender to the data
         data['sender'] = sender.id
-        
+        print(data)        
         # Now, use the serializer to validate and create the instance
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         
-        # Prepare and return the response
+        # Prepare and return the responsec
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -51,6 +51,9 @@ class BadgeViewSet(viewsets.ModelViewSet):
     queryset = Badge.objects.all()
     serializer_class = BadgeSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("owners").filter(owners__id=self.request.user.id)
 
 class KudosCategoryViewSet(viewsets.ModelViewSet):
     """
