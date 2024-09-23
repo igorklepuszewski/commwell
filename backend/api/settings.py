@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "core",
     "communication",
+    "django_filters"
 ]
 
 MIDDLEWARE = [
@@ -126,8 +127,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 from datetime import timedelta

@@ -4,7 +4,8 @@ import { Box, Tabs, Tab, Typography, Paper, List, ListItem, ListItemText } from 
 function ProfilePage() {
   const [value, setValue] = useState(0);
   const [badges, setBadges] = useState([]);  // State for badges
-  const [kudoses, setKudoses] = useState([]);  // State for kudos (inbox)
+  const [kudosesReceived, setKudosesReceived] = useState([]);  // State for kudos (inbox)
+  const [kudosesSent, setKudosesSent] = useState([]);  // State for kudos (inbox)
 
   // Fetch badges from /api/badge
   useEffect(() => {
@@ -25,15 +26,32 @@ function ProfilePage() {
   // Fetch kudos from /api/kudos
   useEffect(() => {
     const token = localStorage.getItem('access_token');
+    const userId = localStorage.getItem('userId')
     if (value === 1) {
-      fetch('http://localhost:8001/api/kudos/', {
+      fetch(`http://localhost:8001/api/kudos/?receiver=${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       })
         .then((response) => response.json())
-        .then((data) => setKudoses(data))
+        .then((data) => setKudosesReceived(data))
+        .catch((error) => console.error('Error fetching kudos:', error));
+    }
+  }, [value]);  // Only fetch kudos when the Inbox tab is selected
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    const userId = localStorage.getItem('userId')
+    if (value === 2) {
+      fetch(`http://localhost:8001/api/kudos/?sender=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => setKudosesSent(data))
         .catch((error) => console.error('Error fetching kudos:', error));
     }
   }, [value]);  // Only fetch kudos when the Inbox tab is selected
@@ -100,7 +118,7 @@ function ProfilePage() {
                 </ListItem>
               ))
             ) : (
-              <Typography>No badges available.</Typography>
+              <Typography>No badges gotten.</Typography>
             )}
           </List>
         </Box>
@@ -111,8 +129,8 @@ function ProfilePage() {
         <Box sx={{ p: 3 }}>
           <Typography sx={{ fontSize: '24px', fontWeight: 'bold' }}>Inbox</Typography>
           <List>
-            {kudoses.length > 0 ? (
-              kudoses.map((kudos) => (
+            {kudosesReceived.length > 0 ? (
+              kudosesReceived.map((kudos) => (
                 <ListItem key={kudos.id}>
                   <ListItemText
                     primary={kudos.message.trim() === "" ? "Empty Kudos" : kudos.message}
@@ -120,7 +138,7 @@ function ProfilePage() {
                 </ListItem>
               ))
             ) : (
-              <Typography>No kudos available.</Typography>
+              <Typography>No kudos received.</Typography>
             )}
           </List>
         </Box>
@@ -129,9 +147,22 @@ function ProfilePage() {
       {/* Send Tab Content */}
       {value === 2 && (
         <Box sx={{ p: 3 }}>
-          <Typography sx={{ fontSize: '24px', fontWeight: 'bold' }}>Send</Typography>
-          <Typography variant="body2">Send messages or feedback from here.</Typography>
-        </Box>
+        <Typography sx={{ fontSize: '24px', fontWeight: 'bold' }}>Outbox</Typography>
+        <List>
+          {kudosesSent.length > 0 ? (
+            kudosesSent.map((kudos) => (
+              <ListItem key={kudos.id}>
+                <ListItemText
+                  primary={kudos.message.trim() === "" ? "Empty Kudos" : kudos.message}
+                  secondary={kudos.receiver_mail}
+                />
+              </ListItem>
+            ))
+          ) : (
+            <Typography>No kudos sent.</Typography>
+          )}
+        </List>
+      </Box>
       )}
     </Paper>
   );

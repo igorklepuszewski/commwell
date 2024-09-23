@@ -45,3 +45,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"error": "User not found"}, status=404)
 
         return Response(annotated_user.first())
+    
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

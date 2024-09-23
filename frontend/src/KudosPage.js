@@ -130,7 +130,7 @@ const KudosPage = () => {
               fontWeight: 'bold',
             }}
           >
-            Write feedback
+            Write kudos
           </Typography>
 
           {error && (

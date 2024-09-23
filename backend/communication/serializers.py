@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from core.models import User
 from communication.models import Badge, Feedback, Kudos, KudosCategory, FeedbackCategory
 
 
@@ -27,10 +28,12 @@ class FeedbackCategorySerializer(serializers.ModelSerializer):
       
 class KudosSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
+    receiver_mail = serializers.SerializerMethodField("get_receiver_mail")
 
     class Meta:
         model = Kudos
-        fields = ["category", "receiver", "sender", "message"]
+        fields = ["category", "receiver", "sender", "message", "receiver_mail"]
+        read_only_fields = ["receiver_mail"]
 
     def get_category(self, obj):
         """
@@ -38,6 +41,9 @@ class KudosSerializer(serializers.ModelSerializer):
         It returns the nested category details.
         """
         return KudosCategorySerializer(obj.category).data
+    
+    def get_receiver_mail(self, obj):
+        return User.objects.get(id=obj.receiver.id).email
 
     def to_internal_value(self, data):
         """

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from communication.serializers import BadgeSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from core.models import User
 
 
@@ -24,6 +25,12 @@ class UserMessageStatsSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = User
         fields = ["id", "in_messages_count", "out_messages_count"]
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user_id'] = self.user.id
+        return data
 
     
 

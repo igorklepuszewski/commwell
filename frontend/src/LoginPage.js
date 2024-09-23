@@ -19,6 +19,7 @@ const LoginPage = () => {
       });
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
+      localStorage.setItem("userId", response.data.user_id)
       navigate("/profile");  // Redirect to homepage after login
     } catch (error) {
       console.error("Login failed:", error.response.data);

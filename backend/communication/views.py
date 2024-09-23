@@ -1,4 +1,5 @@
-from rest_framework import permissions, viewsets
+from communication.filters import KudosFilter
+from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -14,15 +15,14 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     """
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 class KudosViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Kudos.objects.all().select_related("category")
+    queryset = Kudos.objects.all().select_related("category").order_by("-id")
     serializer_class = KudosSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    filterset_class = KudosFilter
 
     def create(self, request, *args, **kwargs):
         # Get the sender from the request user
@@ -50,7 +50,6 @@ class BadgeViewSet(viewsets.ModelViewSet):
     """
     queryset = Badge.objects.all()
     serializer_class = BadgeSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related("owners").filter(owners__id=self.request.user.id)
@@ -61,7 +60,6 @@ class KudosCategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = KudosCategory.objects.all()
     serializer_class = KudosCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class FeedbackCategoryViewSet(viewsets.ModelViewSet):
@@ -70,4 +68,3 @@ class FeedbackCategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = FeedbackCategory.objects.all()
     serializer_class = FeedbackCategorySerializer
-    permission_classes = [permissions.IsAuthenticated] 
